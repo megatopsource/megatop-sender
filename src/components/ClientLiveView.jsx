@@ -84,7 +84,9 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
   };
 
   const displayWebsite = quote.companyWebsite || 'https://megatop.com.eg/';
-  const isHeaderHidden = quote.companyMode === 'hidden';
+  const hasCompanyName = quote.companyMode !== 'hidden' && (
+    quote.companyMode === 'my_company' || (quote.customCompanyName && quote.customCompanyName.trim() !== '')
+  );
 
   const salesRep = salesReps?.find(
     (rep) => rep.id === quote.salesRepId || rep.salesRepId === quote.salesRepId
@@ -138,23 +140,22 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
               onClick={onBackToDashboard}
               className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1"
             >
-              <ChevronRight className="w-4 h-4" />
-              <span>العودة للوحة النظام</span>
+              <ChevronRight className="w-4 h-4 text-indigo-400" />
+              <span>العودة للوحة التحكم</span>
             </button>
 
-            <span className="bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
-              <span>عرض السعر المعتمد لـ Megatop (تصميم أبيض متناسق)</span>
+            <span className="text-xs text-slate-400 font-bold hidden sm:inline">
+              عرض السعر المعتمد لـ {hasCompanyName ? (quote.customCompanyName || 'Megatop') : 'العميل'}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopyLink}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+              className="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow"
             >
               <Share2 className="w-3.5 h-3.5" />
-              <span>نسخ الرابط</span>
+              <span>نسخ الرابط المباشر</span>
             </button>
 
             <button
@@ -171,7 +172,7 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
       {/* Main Quotation Canvas Container */}
       <div className="max-w-6xl mx-auto px-4 pt-6 mb-12">
 
-        {/* Top Theme Toggler Header - Extremely Clear and Visible */}
+        {/* Top Theme Toggler Header */}
         <div className="flex justify-between items-center mb-4 print:hidden">
           <h2 className={`text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
             معاينة عرض السعر التفاعلي (Interactive Quote Preview)
@@ -191,31 +192,29 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
           </button>
         </div>
 
-        {/* Optional Header with clickable Logo image */}
-        {!isHeaderHidden && (
+        {/* Header with Logo: Rendered ONLY if hasCompanyName is true */}
+        {hasCompanyName ? (
           <header className={`border-b transition-colors duration-300 py-5 px-6 rounded-t-3xl shadow-sm flex items-center justify-between gap-4 mb-6 ${
             isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
           }`}>
             <div className="flex items-center gap-4">
-              {/* Show logo image if companyMode is my_company OR if a custom logo was explicitly uploaded */}
-              {(quote.companyMode === 'my_company' || quote.companyLogoUrl) && (
-                <a
-                  href={displayWebsite}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={`الذهاب إلى الموقع الرسمي: ${displayWebsite}`}
-                  className="block"
-                >
-                  <img
-                    src={quote.companyLogoUrl || megatopLogoUrl}
-                    alt="Logo"
-                    className="w-14 h-14 object-contain rounded-full border border-slate-200 bg-white p-1 hover:scale-105 transition-all duration-300 shadow-sm"
-                  />
-                </a>
-              )}
+              {/* Show logo continuously whenever company name is selected */}
+              <a
+                href={displayWebsite}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`الذهاب إلى الموقع الرسمي: ${displayWebsite}`}
+                className="block"
+              >
+                <img
+                  src={quote.companyLogoUrl || megatopLogoUrl}
+                  alt="Megatop Logo"
+                  className="w-16 h-16 object-contain rounded-2xl border border-slate-200 bg-white p-1 hover:scale-105 transition-all duration-300 shadow-sm"
+                />
+              </a>
 
               <div>
-                <h2 className={`font-bold text-sm tracking-wide ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className={`font-bold text-sm sm:text-base tracking-wide ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                   {quote.customCompanyName || 'ميجاتوب سكيورتي سيستم للكاميرات'}
                 </h2>
                 {quote.companyWebsite && (
@@ -223,7 +222,7 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
                     href={quote.companyWebsite}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[11px] text-[#1b5ea8] hover:underline font-mono font-bold"
+                    className="text-[11px] text-[#1b5ea8] hover:underline font-mono font-bold block mt-0.5"
                   >
                     {quote.companyWebsite.replace(/^https?:\/\//, '').replace(/\/$/, '')}
                   </a>
@@ -232,6 +231,19 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
             </div>
 
             <div className="text-left font-mono text-xs text-slate-500">
+              <div>رقم العرض: <strong className={isDarkMode ? 'text-white' : 'text-slate-900'}>{quote.id || 'S54909'}</strong></div>
+              <div>التاريخ: <strong className={isDarkMode ? 'text-white' : 'text-slate-900'}>{quote.date}</strong></div>
+            </div>
+          </header>
+        ) : (
+          /* Without Company Name -> No Logo at all! Just clean Quote info header */
+          <header className={`border-b transition-colors duration-300 py-4 px-6 rounded-t-3xl shadow-sm flex items-center justify-between gap-4 mb-6 ${
+            isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
+          }`}>
+            <div className="text-xs font-bold text-slate-400">
+              عرض سعر خاص للعميل (بدون اسم شركة - بدون لوجو)
+            </div>
+            <div className="text-left font-mono text-xs text-slate-500 flex gap-4">
               <div>رقم العرض: <strong className={isDarkMode ? 'text-white' : 'text-slate-900'}>{quote.id || 'S54909'}</strong></div>
               <div>التاريخ: <strong className={isDarkMode ? 'text-white' : 'text-slate-900'}>{quote.date}</strong></div>
             </div>
@@ -249,22 +261,22 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
               isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
             }`}>
               <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                إجمالي قيمة عرض السعار (Total Amount)
+                إجمالي قيمة عرض السعر (Total Amount)
               </div>
 
-              <div className="text-3xl font-black text-[#d22630] font-mono">
-                {(quote.grandTotal || quote.subtotal || 0).toLocaleString('ar-EG')} <span className="text-sm text-slate-500 font-normal">ج.م</span>
+              <div className="text-3xl font-black text-[#C8102E] font-mono">
+                {(quote.grandTotal || quote.subtotal || 0).toLocaleString('en-US')} <span className="text-sm text-slate-500 font-normal">ج.م</span>
               </div>
 
               {isSigned ? (
-                <div className="bg-emerald-550/10 border border-emerald-500/30 text-emerald-700 p-3 rounded-2xl text-xs font-bold flex items-center gap-2">
+                <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 p-3 rounded-2xl text-xs font-bold flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                   <span>تم توقيع واعتماد هذا العرض بنجاح!</span>
                 </div>
               ) : (
                 <button
                   onClick={() => setIsSignModalOpen(true)}
-                  className="w-full bg-[#d22630] hover:bg-[#b01c24] text-white font-bold py-3.5 rounded-2xl text-xs transition shadow-lg shadow-[#d22630]/25 flex items-center justify-center gap-2"
+                  className="w-full bg-[#C8102E] hover:bg-[#a60c24] text-white font-bold py-3.5 rounded-2xl text-xs transition shadow-lg shadow-[#C8102E]/25 flex items-center justify-center gap-2"
                 >
                   <Check className="w-4 h-4" />
                   <span>Sign & Accept (التوقيع والاعتماد)</span>
@@ -273,7 +285,7 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
 
               <button
                 onClick={handlePrint}
-                className="w-full bg-[#1b5ea8] hover:bg-[#144983] text-white font-bold py-3 rounded-2xl text-xs transition flex items-center justify-center gap-2 shadow"
+                className="w-full bg-[#0F2C59] hover:bg-[#0a1e3f] text-white font-bold py-3 rounded-2xl text-xs transition flex items-center justify-center gap-2 shadow-md"
               >
                 <Printer className="w-4 h-4 text-white" />
                 <span>تحميل / طباعة عرض السعر (View Details / PDF)</span>
@@ -290,12 +302,12 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-550/10 border border-blue-500/20 flex items-center justify-center text-[#1b5ea8] font-bold text-sm">
+                  <div className="w-10 h-10 rounded-full bg-[#0F2C59]/10 border border-[#0F2C59]/20 flex items-center justify-center text-[#0F2C59] font-bold text-sm">
                     {salesRep.name ? salesRep.name.charAt(0) : 'M'}
                   </div>
                   <div>
                     <h4 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{salesRep.name}</h4>
-                    <p className="text-xs text-slate-550">{salesRep.phone ? `هاتف: ${salesRep.phone}` : 'مبيعات Megatop'}</p>
+                    <p className="text-xs text-slate-500">{salesRep.phone ? `هاتف: ${salesRep.phone}` : 'مبيعات Megatop'}</p>
                   </div>
                 </div>
 
@@ -323,20 +335,20 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
             {/* Document Header & Title */}
             <div className="border-b border-slate-200/20 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="bg-red-50 text-[#d22630] border border-red-100 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                <span className="bg-red-50 text-[#C8102E] border border-red-200 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                   Quotation / عرض سعر رسمي
                 </span>
                 <h1 className={`text-2xl font-black mt-2 flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                   <span>عرض سعر رقم:</span>
-                  <span className="text-[#1b5ea8] font-mono">{quote.id || 'S54909'}</span>
+                  <span className="text-[#0F2C59] font-mono">{quote.id || 'S54909'}</span>
                 </h1>
               </div>
 
               <div className={`text-left font-mono text-xs p-3 rounded-2xl border ${
-                isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-400' : 'bg-slate-550 border-slate-200 text-slate-500'
+                isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'
               }`}>
                 <div>تاريخ الإصدار: <strong className={isDarkMode ? 'text-white' : 'text-slate-900'}>{quote.date}</strong></div>
-                <div className="mt-1">صالح حتى: <strong className="text-rose-500">{quote.validUntil}</strong></div>
+                <div className="mt-1">صالح حتى: <strong className="text-[#C8102E]">{quote.validUntil}</strong></div>
               </div>
             </div>
 
@@ -345,41 +357,41 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
 
               {/* Sale Info Box */}
               <div className={`p-5 rounded-2xl border transition-colors duration-300 space-y-3 ${
-                isDarkMode ? 'bg-slate-950 border-slate-800' : 'bg-slate-550 border-slate-200'
+                isDarkMode ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}>
                 <h3 className={`font-bold text-sm flex items-center gap-2 border-b pb-2 ${
                   isDarkMode ? 'text-white border-slate-800' : 'text-slate-900 border-slate-200'
                 }`}>
-                  <FileText className="w-4 h-4 text-[#1b5ea8]" />
+                  <FileText className="w-4 h-4 text-[#0F2C59]" />
                   <span>بيانات الطلب والعرض (Sale Info)</span>
                 </h3>
 
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between border-b border-slate-200/20 pb-1.5">
-                    <span className="text-slate-550">رقم الكود المرجعي:</span>
+                    <span className="text-slate-500">رقم الكود المرجعي:</span>
                     <span className={`font-bold font-mono ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{quote.id || 'S54909'}</span>
                   </div>
 
                   <div className="flex justify-between border-b border-slate-200/20 pb-1.5">
-                    <span className="text-slate-550">تاريخ العرض:</span>
+                    <span className="text-slate-500">تاريخ العرض:</span>
                     <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{quote.date}</span>
                   </div>
 
                   <div className="flex justify-between">
-                    <span className="text-slate-550">تاريخ الانتهاء:</span>
-                    <span className="font-bold text-rose-500">{quote.validUntil}</span>
+                    <span className="text-slate-500">تاريخ الانتهاء:</span>
+                    <span className="font-bold text-[#C8102E]">{quote.validUntil}</span>
                   </div>
                 </div>
               </div>
 
               {/* Customer Address & Contact Info Box */}
               <div className={`p-5 rounded-2xl border transition-colors duration-300 space-y-3 ${
-                isDarkMode ? 'bg-slate-950 border-slate-800' : 'bg-slate-550 border-slate-200'
+                isDarkMode ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}>
                 <h3 className={`font-bold text-sm flex items-center gap-2 border-b pb-2 ${
                   isDarkMode ? 'text-white border-slate-800' : 'text-slate-900 border-slate-200'
                 }`}>
-                  <Building2 className="w-4 h-4 text-[#1b5ea8]" />
+                  <Building2 className="w-4 h-4 text-[#0F2C59]" />
                   <span>الجهة والعميل (Customer Address)</span>
                 </h3>
 
@@ -395,21 +407,21 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
                   )}
 
                   {quote.clientAddress && (
-                    <div className="text-slate-550 flex items-center gap-1.5">
+                    <div className="text-slate-500 flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       <span>{quote.clientAddress}</span>
                     </div>
                   )}
 
                   {quote.clientPhone && (
-                    <div className="text-slate-550 flex items-center gap-1.5 font-mono">
+                    <div className="text-slate-500 flex items-center gap-1.5 font-mono">
                       <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       <span>{quote.clientPhone}</span>
                     </div>
                   )}
 
                   {quote.clientEmail && (
-                    <div className="text-slate-550 flex items-center gap-1.5 font-mono">
+                    <div className="text-slate-500 flex items-center gap-1.5 font-mono">
                       <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       <span>{quote.clientEmail}</span>
                     </div>
@@ -425,7 +437,7 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
 
               <div className={`overflow-x-auto rounded-2xl border ${isDarkMode ? 'border-slate-800' : 'border-slate-200'}`}>
                 <table className="w-full text-right text-xs">
-                  <thead className="bg-[#1b5ea8] text-white font-bold table-header">
+                  <thead className="bg-[#0F2C59] text-white font-bold table-header">
                     <tr>
                       <th className="py-3.5 px-4">اسم المنتجات والبنود (Products)</th>
                       <th className="py-3.5 px-3 text-center">الكمية (Qty)</th>
@@ -449,12 +461,12 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
                           {item.quantity} <span className="text-[10px] text-slate-500 font-normal">{item.unit || 'قطعة'}</span>
                         </td>
 
-                        <td className="py-3.5 px-3 text-center font-mono text-slate-555">
-                          {(item.unitPrice || 0).toLocaleString('ar-EG')} ج.م
+                        <td className="py-3.5 px-3 text-center font-mono text-slate-500">
+                          {(item.unitPrice || 0).toLocaleString('en-US')} ج.م
                         </td>
 
-                        <td className="py-3.5 px-4 text-left font-bold font-mono text-indigo-500">
-                          {(item.total || (item.quantity * item.unitPrice) || 0).toLocaleString('ar-EG')} ج.م
+                        <td className="py-3.5 px-4 text-left font-bold font-mono text-[#0F2C59]">
+                          {(item.total || (item.quantity * item.unitPrice) || 0).toLocaleString('en-US')} ج.م
                         </td>
                       </tr>
                     ))}
@@ -470,26 +482,26 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
               }`}>
                 <div className="flex justify-between">
                   <span>المبلغ قبل الضريبة:</span>
-                  <span className="font-bold">{(quote.subtotal || 0).toLocaleString('ar-EG')} ج.م</span>
+                  <span className="font-bold">{(quote.subtotal || 0).toLocaleString('en-US')} ج.م</span>
                 </div>
 
                 {quote.discount > 0 && (
-                  <div className="flex justify-between text-rose-550 font-bold">
+                  <div className="flex justify-between text-[#C8102E] font-bold">
                     <span>الخصم الممنوح:</span>
-                    <span>-{(quote.discount || 0).toLocaleString('ar-EG')} ج.م</span>
+                    <span>-{(quote.discount || 0).toLocaleString('en-US')} ج.م</span>
                   </div>
                 )}
 
                 {quote.taxAmount > 0 && (
                   <div className="flex justify-between">
                     <span>ضريبة القيمة المضافة ({quote.taxRate || 14}%):</span>
-                    <span className="font-bold">+{(quote.taxAmount || 0).toLocaleString('ar-EG')} ج.م</span>
+                    <span className="font-bold">+{(quote.taxAmount || 0).toLocaleString('en-US')} ج.م</span>
                   </div>
                 )}
 
                 <div className="pt-3 border-t border-slate-200 flex justify-between items-center text-sm font-black">
                   <span>الإجمالي النهائي (Total):</span>
-                  <span className="text-lg text-[#d22630] font-black">{(quote.grandTotal || quote.subtotal || 0).toLocaleString('ar-EG')} ج.م</span>
+                  <span className="text-lg text-[#C8102E] font-black">{(quote.grandTotal || quote.subtotal || 0).toLocaleString('en-US')} ج.م</span>
                 </div>
               </div>
             </div>
@@ -505,7 +517,7 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
             </div>
 
             {/* Official Signature Stamp Section */}
-            {quote.companyMode !== 'hidden' && (
+            {hasCompanyName && (
               <div className="pt-6 border-t border-slate-200/20 flex justify-between items-end text-xs">
                 <div className="text-center space-y-2">
                   <div className="text-slate-400">توقيع واعتماد العميل</div>
@@ -519,22 +531,14 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
                 </div>
 
                 <div className="text-center space-y-2">
-                  <div className="text-slate-450">خاتم الشركة واعتماد الإدارة</div>
-                  { (quote.companyMode === 'my_company' || quote.companyLogoUrl) ? (
-                    <a href={displayWebsite} target="_blank" rel="noopener noreferrer" className="block">
-                      <img
-                        src={quote.companyLogoUrl || megatopLogoUrl}
-                        alt="Stamp"
-                        className="w-16 h-16 object-contain rounded-full bg-white p-1 border border-slate-200 mx-auto"
-                      />
-                    </a>
-                  ) : (
-                    <div className={`border p-2.5 rounded-xl font-bold text-[10px] uppercase tracking-wider inline-block ${
-                      isDarkMode ? 'border-slate-800 bg-slate-950 text-white' : 'border-slate-300 bg-slate-50 text-slate-800'
-                    }`}>
-                      {quote.customCompanyName || 'اعتماد الإدارة'}
-                    </div>
-                  )}
+                  <div className="text-slate-455 font-bold">خاتم الشركة واعتماد الإدارة</div>
+                  <a href={displayWebsite} target="_blank" rel="noopener noreferrer" className="block">
+                    <img
+                      src={quote.companyLogoUrl || megatopLogoUrl}
+                      alt="Stamp"
+                      className="w-16 h-16 object-contain rounded-2xl bg-white p-1 border border-slate-200 mx-auto shadow-sm"
+                    />
+                  </a>
                 </div>
               </div>
             )}
@@ -545,8 +549,8 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
 
       </div>
 
-      {/* Webpage Footer: Shown ONLY if company name option is 'my_company' */}
-      {quote.companyMode === 'my_company' && (
+      {/* Webpage Footer: Shown whenever Company Name and Logo are enabled */}
+      {hasCompanyName && (
         <footer className="bg-slate-950 text-slate-400 pt-16 pb-8 border-t border-slate-900 mt-16 font-sans print:hidden">
           <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
             
@@ -635,7 +639,7 @@ export default function ClientLiveView({ quotation, salesReps, onBackToDashboard
               </div>
 
               <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-emerald-800 text-[11px] leading-relaxed">
-                بالضغط على تأكيد، أنت تؤكد الموافقة الرسمية على بنود عرض السعر رقم <strong>{quote.id}</strong> بالإجمالي قدره <strong>{(quote.grandTotal || quote.subtotal).toLocaleString('ar-EG')} ج.م</strong>.
+                بالضغط على تأكيد، أنت تؤكد الموافقة الرسمية على بنود عرض السعر رقم <strong>{quote.id}</strong> بالإجمالي قدره <strong>{(quote.grandTotal || quote.subtotal).toLocaleString('en-US')} ج.م</strong>.
               </div>
 
               <div className="flex justify-end gap-3 pt-2">

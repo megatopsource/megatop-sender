@@ -272,10 +272,11 @@ export default function App() {
     }
 
     updateQuotations(updatedList);
-    alert('تم حفظ عرض السعر وتحديث الرابط الحي بنجاح!');
-    setActiveTab('quotations');
     setEditingQuote(null);
     setSelectedQuoteClient(null);
+    setActiveLiveQuote(quoteData);
+    setActiveTab('live-view');
+    alert('✅ تم حفظ عرض السعر وتحديث الرابط الحي بنجاح!\nجاري فتح المعاينة الحية فوراً...');
   };
 
   const handleEditQuote = (quote) => {

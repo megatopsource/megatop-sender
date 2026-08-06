@@ -42,7 +42,7 @@ export default function AdminDashboard({ salesReps, clients, quotations, onSelec
             <span>إجمالي قواميس العملاء</span>
             <UserCheck className="w-5 h-5 text-emerald-400" />
           </div>
-          <div className="text-2xl font-extrabold text-white font-mono">{totalClients.toLocaleString('ar-EG')}</div>
+          <div className="text-2xl font-extrabold text-white font-mono">{totalClients.toLocaleString('en-US')}</div>
           <div className="text-[11px] text-slate-400">موزعين على الـ 30 مسؤول مبيعات</div>
         </div>
 
@@ -62,7 +62,7 @@ export default function AdminDashboard({ salesReps, clients, quotations, onSelec
             <span>إجمالي قيمة عروض الأسعار</span>
             <DollarSign className="w-5 h-5 text-emerald-400" />
           </div>
-          <div className="text-2xl font-extrabold text-emerald-400 font-mono">{totalRevenue.toLocaleString('ar-EG')} ج.م</div>
+          <div className="text-2xl font-extrabold text-emerald-400 font-mono">{totalRevenue.toLocaleString('en-US')} ج.م</div>
           <div className="text-[11px] text-indigo-300">مجموع قيم الفواتير بالروابط الحية</div>
         </div>
       </div>
@@ -98,13 +98,13 @@ export default function AdminDashboard({ salesReps, clients, quotations, onSelec
                   </td>
                   <td className="py-3 px-4 text-slate-400 font-mono">{stat.rep.phone}</td>
                   <td className="py-3 px-4 text-center font-bold text-indigo-300 font-mono">
-                    {stat.clientCount.toLocaleString('ar-EG')} عميل
+                    {stat.clientCount.toLocaleString('en-US')} عميل
                   </td>
                   <td className="py-3 px-4 text-center font-bold text-emerald-400 font-mono">
                     {stat.quoteCount} كوتيشن
                   </td>
                   <td className="py-3 px-4 text-left font-mono font-bold text-emerald-400">
-                    {stat.revenue.toLocaleString('ar-EG')} ج.م
+                    {stat.revenue.toLocaleString('en-US')} ج.م
                   </td>
                 </tr>
               ))}

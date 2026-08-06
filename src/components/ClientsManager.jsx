@@ -148,7 +148,7 @@ export default function ClientsManager({
         <div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <User className="w-6 h-6 text-indigo-400" />
-            <span>إدارة قواميس العملاء ({filteredClients.length.toLocaleString('ar-EG')} عميل)</span>
+            <span>إدارة قواميس العملاء ({filteredClients.length.toLocaleString('en-US')} عميل)</span>
           </h2>
           <p className="text-xs text-slate-400 mt-1">
             {currentUser.role === 'admin'
@@ -269,7 +269,7 @@ export default function ClientsManager({
 
                       {currentUser.role === 'admin' && (
                         <td className="py-3 px-4 text-xs">
-                          <span className="inline-flex items-center gap-1 bg-slate-800 text-indigo-300 px-2.5 py-1 rounded-md border border-slate-700">
+                          <span className="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 px-2.5 py-1 rounded-md">
                             👤 {rep ? rep.name : 'غير محدد'}
                           </span>
                         </td>
@@ -342,7 +342,7 @@ export default function ClientsManager({
         {/* Pagination Bar */}
         <div className="bg-slate-950/80 px-5 py-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
           <div>
-            عرض الصفحة <span className="font-bold text-white">{currentPage}</span> من <span className="font-bold text-white">{totalPages}</span> (إجمالي {filteredClients.length.toLocaleString('ar-EG')} عميل)
+            عرض الصفحة <span className="font-bold text-white">{currentPage}</span> من <span className="font-bold text-white">{totalPages}</span> (إجمالي {filteredClients.length.toLocaleString('en-US')} عميل)
           </div>
 
           <div className="flex items-center gap-2">

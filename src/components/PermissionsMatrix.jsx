@@ -108,7 +108,7 @@ export default function PermissionsMatrix({ rolesPermissions, onSavePermissions 
               {permissionsList.map((perm) => (
                 <tr key={perm.id} className="hover:bg-slate-800/40 transition">
                   <td className="py-3 px-4">
-                    <span className="text-[10px] bg-slate-800 text-indigo-300 px-2 py-0.5 rounded font-bold ml-2">
+                    <span className="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded font-bold ml-2">
                       {perm.group}
                     </span>
                     <span className="font-semibold text-slate-100">{perm.label}</span>

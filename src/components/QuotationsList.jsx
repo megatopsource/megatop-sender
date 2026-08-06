@@ -160,7 +160,7 @@ export default function QuotationsList({
                   <div className="text-xs text-slate-400 flex items-center gap-2">
                     <span>عدد البنود: <strong className="text-slate-200">{quote.items?.length || 0}</strong></span>
                     <span>•</span>
-                    <span>الإجمالي: <strong className="text-emerald-400 font-mono text-sm">{quote.grandTotal?.toLocaleString('ar-EG')} ج.م</strong></span>
+                    <span>الإجمالي: <strong className="text-emerald-400 font-mono text-sm">{quote.grandTotal?.toLocaleString('en-US')} ج.م</strong></span>
                   </div>
                 </div>
 

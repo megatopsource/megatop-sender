@@ -112,7 +112,7 @@ export default function RoleSwitcherBar({
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             <span>20,000 عميل</span>
             <span className="bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
-              {totalClientsCount.toLocaleString('ar-EG')}
+              {totalClientsCount.toLocaleString('en-US')}
             </span>
           </button>
         </div>

@@ -123,14 +123,16 @@ export default function QuotationBuilder({
   };
 
   const handleSave = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (!selectedClient) {
-      alert('يرجى اختيار العميل أولاً');
+      alert('⚠️ يرجى اختيار العميل أولاً قبل حفظ عرض السعر.');
       return;
     }
 
-    if (lineItems.some(i => !i.title.trim())) {
-      alert('يرجى كتابة عنوان البند لجميع البنود المضافة');
+    // Filter out completely empty items automatically
+    const validItems = lineItems.filter(i => i.title && i.title.trim() !== '');
+    if (validItems.length === 0) {
+      alert('⚠️ يرجى إضافة بند واحد على الأقل وتحديد اسم البند والسعر.');
       return;
     }
 
@@ -144,7 +146,7 @@ export default function QuotationBuilder({
       clientName: selectedClient.name,
       clientPhone: selectedClient.phone,
       clientCompany: selectedClient.company,
-      salesRepId: currentUser.role === 'sales' ? currentUser.salesRepId : selectedClient.salesRepId,
+      salesRepId: currentUser.role === 'sales' ? currentUser.salesRepId : (selectedClient.salesRepId || currentUser.salesRepId || 'sales-1'),
       date,
       validUntil,
       status,
@@ -153,7 +155,7 @@ export default function QuotationBuilder({
       companyWebsite,
       companyLogoUrl,
       showRepContact,
-      items: lineItems,
+      items: validItems,
       subtotal,
       discount: parseFloat(discount) || 0,
       taxRate: parseFloat(taxRate) || 0,
@@ -312,7 +314,7 @@ export default function QuotationBuilder({
                 }`}
               >
                 <input type="radio" checked={companyMode === 'custom' || companyMode === 'my_company'} onChange={() => {}} className="hidden" />
-                <span>🏢 عرض اسم الشركة</span>
+                <span>🏢 عرض باسم الشركة (إظهار اللوجو واسم الشركة باستمرار)</span>
               </label>
 
               <label
@@ -324,7 +326,7 @@ export default function QuotationBuilder({
                 }`}
               >
                 <input type="radio" checked={companyMode === 'hidden'} onChange={() => {}} className="hidden" />
-                <span>🚫 إخفاء اسم الشركة بالكامل</span>
+                <span>🚫 عرض بدون اسم شركة (بدون لوجو - إخفاء اللوجو والاسم)</span>
               </label>
             </div>
 
@@ -511,7 +513,7 @@ export default function QuotationBuilder({
                     <div>
                       <label className="block text-slate-400 mb-1">الإجمالي</label>
                       <div className="font-bold font-mono text-emerald-400 py-1 text-xs">
-                        {(item.total || 0).toLocaleString('ar-EG')} ج.م
+                        {(item.total || 0).toLocaleString('en-US')} ج.م
                       </div>
                     </div>
 
@@ -533,7 +535,7 @@ export default function QuotationBuilder({
           <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-3 text-xs max-w-sm mr-auto">
             <div className="flex justify-between text-slate-300">
               <span>المجموع الفرعي:</span>
-              <span className="font-mono font-bold text-white">{subtotal.toLocaleString('ar-EG')} ج.م</span>
+              <span className="font-mono font-bold text-white">{subtotal.toLocaleString('en-US')} ج.م</span>
             </div>
 
             <div className="flex items-center justify-between gap-2">
@@ -558,7 +560,7 @@ export default function QuotationBuilder({
 
             <div className="pt-2 border-t border-slate-800 flex justify-between items-center text-sm font-bold">
               <span className="text-emerald-400">الإجمالي النهائي:</span>
-              <span className="font-mono text-lg text-emerald-400">{grandTotal.toLocaleString('ar-EG')} ج.م</span>
+              <span className="font-mono text-lg text-emerald-400">{grandTotal.toLocaleString('en-US')} ج.م</span>
             </div>
           </div>
         </div>
@@ -609,6 +611,25 @@ export default function QuotationBuilder({
                 <span>مشاركة واتساب</span>
               </button>
             </div>
+          </div>
+
+          {/* Big Prominent Save Button at Bottom of Page */}
+          <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-4">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-5 py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 text-xs font-semibold"
+            >
+              إلغاء
+            </button>
+
+            <button
+              type="submit"
+              className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white px-8 py-3 rounded-xl text-sm font-bold transition shadow-xl shadow-indigo-600/30"
+            >
+              <CheckCircle className="w-5 h-5" />
+              <span>حفظ وتأكيد عرض السعر الان</span>
+            </button>
           </div>
         </div>
       </form>

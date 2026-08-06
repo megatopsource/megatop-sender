@@ -317,14 +317,14 @@ export default function ItemCatalog({ items, rolesPermissions, currentUser, onAd
             <div className="flex items-center justify-between pt-3 border-t border-slate-800/80">
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-400">UNIT:</span>
-                <span className="bg-slate-900 text-slate-200 px-2 py-0.5 rounded text-xs font-bold border border-slate-700">
+                <span className="bg-slate-500/10 text-slate-300 border border-slate-500/30 px-2 py-0.5 rounded text-xs font-bold">
                   {item.unit || 'قطعة'}
                 </span>
               </div>
 
               <div className="flex items-center gap-2">
                 <div className="text-emerald-400 font-bold font-mono text-base mr-2">
-                  {(item.price || 0).toLocaleString('ar-EG')} <span className="text-xs text-slate-400">ج.م</span>
+                  {(item.price || 0).toLocaleString('en-US')} <span className="text-xs text-slate-400">ج.م</span>
                 </div>
 
                 {/* Protected Edit Item Button */}

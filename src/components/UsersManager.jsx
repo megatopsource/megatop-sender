@@ -175,7 +175,7 @@ export default function UsersManager({ users, onAddUser, onUpdateUser, onDeleteU
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className="bg-slate-800 text-indigo-300 px-2.5 py-1 rounded-md border border-slate-700 font-semibold">
+                      <span className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 px-2.5 py-1 rounded-md font-semibold">
                         {roleObj ? roleObj.label : user.role}
                       </span>
                     </td>

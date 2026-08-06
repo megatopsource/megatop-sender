@@ -32,7 +32,7 @@ export default function Sidebar({
       id: 'clients',
       label: 'إدارة العملاء',
       icon: Users,
-      badge: currentUser.role === 'admin' ? totalClientsCount.toLocaleString('ar-EG') : assignedClientsCount.toLocaleString('ar-EG'),
+      badge: currentUser.role === 'admin' ? totalClientsCount.toLocaleString('en-US') : assignedClientsCount.toLocaleString('en-US'),
       badgeColor: 'bg-indigo-500/20 text-indigo-300'
     },
     {
@@ -114,36 +114,38 @@ export default function Sidebar({
       >
         <div className="p-5 border-b border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-600/30">
-              M
-            </div>
+            <img
+              src="/logo.png"
+              alt="MEGATOP"
+              className="w-10 h-10 object-contain rounded-xl bg-white p-0.5 border border-slate-700 shadow-md"
+            />
             <div>
               <h1 className="text-lg font-black tracking-wide text-white">megatop.com.eg</h1>
               <p className="text-[11px] text-indigo-400 font-semibold">منصة المبيعات وعروض الأسعار v2.0</p>
             </div>
           </div>
 
-          <div className="mt-4 bg-slate-950/80 border border-slate-800 p-3 rounded-2xl space-y-2">
+          <div className="mt-4 bg-slate-950/80 border border-slate-800 p-3.5 rounded-2xl space-y-3 shadow-inner">
             <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-400">المستخدم الحالي:</span>
-              <span className="font-bold text-amber-400 truncate max-w-[120px]">{currentUser.name}</span>
+              <span className="text-slate-200 font-semibold">المستخدم الحالي:</span>
+              <span className="font-extrabold text-amber-400 truncate max-w-[130px]">{currentUser.name}</span>
             </div>
 
-            <div className="pt-2 border-t border-slate-800/80 flex justify-between items-center text-xs">
-              <span className="text-slate-300 flex items-center gap-1">
-                <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="pt-2.5 border-t border-slate-800 flex justify-between items-center text-xs">
+              <span className="text-slate-200 font-medium flex items-center gap-1.5">
+                <UserCheck className="w-4 h-4 text-emerald-400" />
                 <span>{currentUser.role === 'admin' ? 'إجمالي العملاء:' : 'العملاء الخاصين بك:'}</span>
               </span>
-              <span className="font-bold font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
-                {currentUser.role === 'admin' ? totalClientsCount.toLocaleString('ar-EG') : assignedClientsCount.toLocaleString('ar-EG')}
+              <span className="font-bold font-mono text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded-lg border border-emerald-500/40 text-xs">
+                {currentUser.role === 'admin' ? totalClientsCount.toLocaleString('en-US') : assignedClientsCount.toLocaleString('en-US')}
               </span>
             </div>
 
             <button
               onClick={onLogout}
-              className="w-full mt-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 text-rose-300 py-1.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition"
+              className="w-full mt-2 bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition shadow-md shadow-rose-600/20"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <LogOut className="w-4 h-4 text-white" />
               <span>تسجيل الخروج من الحساب</span>
             </button>
           </div>

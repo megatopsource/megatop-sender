@@ -58,9 +58,11 @@ export default function LoginScreen({ users, onLoginSuccess }) {
 
         {/* Logo & Header */}
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 mx-auto flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-indigo-600/30">
-            M
-          </div>
+          <img
+            src="/logo.png"
+            alt="MEGATOP"
+            className="w-16 h-16 object-contain rounded-2xl bg-white p-1 mx-auto border border-slate-700 shadow-xl"
+          />
           <h1 className="text-2xl font-black tracking-wide text-white">megatop.com.eg</h1>
           <p className="text-xs text-slate-400">تسجيل الدخول للموظفين والمديرين للوصول للنظام</p>
         </div>

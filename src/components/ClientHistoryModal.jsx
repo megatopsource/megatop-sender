@@ -156,14 +156,14 @@ export default function ClientHistoryModal({
           <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800 space-y-1">
             <span className="text-slate-400 block">قيمة العروض المقبولة:</span>
             <span className="text-lg font-bold text-emerald-400 font-mono">
-              {totalApprovedRevenue.toLocaleString('ar-EG')} ج.م
+              {totalApprovedRevenue.toLocaleString('en-US')} ج.م
             </span>
           </div>
 
           <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800 space-y-1">
             <span className="text-slate-400 block">إجمالي قيمة التعاملات:</span>
             <span className="text-lg font-bold text-indigo-300 font-mono">
-              {totalQuotationsValue.toLocaleString('ar-EG')} ج.م
+              {totalQuotationsValue.toLocaleString('en-US')} ج.م
             </span>
           </div>
 
@@ -264,7 +264,7 @@ export default function ClientHistoryModal({
 
                     {item.type === 'quote' && (
                       <div className="flex items-center gap-3 font-mono text-xs text-slate-400">
-                        <span>الإجمالي: <strong className="text-emerald-400">{(item.amount || 0).toLocaleString('ar-EG')} ج.م</strong></span>
+                        <span>الإجمالي: <strong className="text-emerald-400">{(item.amount || 0).toLocaleString('en-US')} ج.م</strong></span>
                         <span>•</span>
                         <span>الحالة: <strong className="text-indigo-300">{item.status}</strong></span>
                       </div>
